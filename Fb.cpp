@@ -121,7 +121,7 @@ const int to_int(std::string s)
     return n;
 }
 
-const bool FB::addFriend()
+const bool FB::addNewUser()
 {
     try
     {

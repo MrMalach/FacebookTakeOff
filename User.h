@@ -11,7 +11,6 @@ class User
     bool _canFriedsPost;
 
     std::vector<Status*> wall;
-    
     std::vector<User*> friends;
 public:
     User(const std::string&, const std::string&, const bool);
@@ -29,4 +28,4 @@ public:
     friend std::ostream& operator<<(std::ostream&, User*);
 };
 
-#endif
+#endif //USER_H

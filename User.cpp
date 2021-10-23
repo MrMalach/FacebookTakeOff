@@ -1,7 +1,6 @@
 #include "User.h"
 
 
-
 User::User(const std::string& name, const std::string& bd, const bool cws)
     : _name(name), _bd(bd), _canFriedsPost(cws){}
 
@@ -58,7 +57,6 @@ const bool User::getCanFriedsPost() const
 {
     return _canFriedsPost;
 }
-
 
 std::ostream& operator<<(std::ostream& o, User* user)
 {

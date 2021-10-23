@@ -11,19 +11,19 @@ class FB
     size_t _usersCnt;
     UsersMapType* Users;
     const size_t getId(std::string, size_t) const;
+
+    bool addUser(User*);
+    User* getUser(const std::string&) const;
 public:
 
     FB();
     ~FB();
-
-    bool addUser(User*);
-    User* getUser(const std::string&) const;
-
+    
     const size_t getUserCount() const;
     void printAllUsers() const;
 
 // Main menu functions:
-    const bool addFriend();
+    const bool addNewUser();
     const bool addStatus();
     void showWall() const;
     const bool connectFrieds();

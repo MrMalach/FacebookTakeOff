@@ -14,11 +14,10 @@ class Status
     std::string _status;
 
 public:
-
     Status(const std::string&);
     ~Status();
 
     friend std::ostream& operator<<(std::ostream&, const Status&);
 };
 
-#endif
+#endif //STATUS_H
