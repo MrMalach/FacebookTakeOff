@@ -2,9 +2,13 @@
 #define FB_H
 
 #include<map>
+
+#include "Person.h"
 #include "User.h"
 
-typedef std::map<std::string, std::vector<User*>*> UsersMapType;
+// **** For search and insertion logarithmic complexity ************
+typedef std::map<std::string, std::vector<User*>*> UsersMapType;//**
+// *****************************************************************
 
 class FB
 {
@@ -18,7 +22,7 @@ public:
 
     FB();
     ~FB();
-    
+
     const size_t getUserCount() const;
     void printAllUsers() const;
 
@@ -26,8 +30,9 @@ public:
     const bool addNewUser();
     const bool addStatus();
     void showWall() const;
-    const bool connectFrieds();
-    void showFriendFrieds() const;
+    const bool connectUsers();
+    const bool removeFanFromPage();
+    void showUsersFriendsList() const;
 };
 
 

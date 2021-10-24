@@ -24,15 +24,18 @@ int main()
                     fb->showWall();
                 break;
                 case '4':
-                    fb->connectFrieds();
+                    fb->connectUsers();
                 break;
                 case '5':
                     fb->printAllUsers();
                 break;
                 case '6':
-                    fb->showFriendFrieds();
+                    fb->showUsersFriendsList();
                 break;
                 case '7':
+                    fb->removeFanFromPage();
+                break;
+                case '8':
                     delete fb;
                     return 0;
                 break;
@@ -50,15 +53,16 @@ int main()
 
 const char getChoice()
 {
-    std::cout << "*********** MENU **************" << std::endl;
-    std::cout << "1. Add friend                 *" << std::endl;
-    std::cout << "2. Add status                 *" << std::endl;
-    std::cout << "3. Show wall                  *" << std::endl;
-    std::cout << "4. Connect frieds             *" << std::endl;
-    std::cout << "5. Show all users             *" << std::endl;
-    std::cout << "6. Show user's friends list   *" << std::endl;
-    std::cout << "7. Quit                       *" << std::endl;
-    std::cout << "*******************************" << std::endl;
+    std::cout << "***************** MENU ***********************" << std::endl;
+    std::cout << "1. Add friend                                *" << std::endl;
+    std::cout << "2. Add status                                *" << std::endl;
+    std::cout << "3. Show wall                                 *" << std::endl;
+    std::cout << "4. Connect frieds                            *" << std::endl;
+    std::cout << "5. Show all users                            *" << std::endl;
+    std::cout << "6. Show user's friends list                  *" << std::endl;
+    std::cout << "7. Remove friend from page's friends list    *" << std::endl;
+    std::cout << "8. Quit                                      *" << std::endl;
+    std::cout << "**********************************************" << std::endl;
 
     char choice;
     std::cin >> choice;
