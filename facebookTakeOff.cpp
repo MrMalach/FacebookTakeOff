@@ -4,36 +4,46 @@ const char getChoice();
 
 int main()
 {
-    FB* fb = new FB;
-    while(true)
+    try
     {
-        switch(getChoice())
+        FB* fb = new(std::nothrow) FB;
+        if(nullptr == fb)
+            throw(std::invalid_argument("Allocation error"));
+    
+        while(true)
         {
-            case '1':
-                fb->addNewUser();
-            break;
-            case '2':
-                fb->addStatus();
-            break;
-            case '3':
-                fb->showWall();
-            break;
-            case '4':
-                fb->connectFrieds();
-            break;
-            case '5':
-                fb->printAllUsers();
-            break;
-            case '6':
-                fb->showFriendFrieds();
-            break;
-            case '7':
-                delete fb;
-                return 0;
-            break;
-            default:
-            break;
+            switch(getChoice())
+            {
+                case '1':
+                    fb->addNewUser();
+                break;
+                case '2':
+                    fb->addStatus();
+                break;
+                case '3':
+                    fb->showWall();
+                break;
+                case '4':
+                    fb->connectFrieds();
+                break;
+                case '5':
+                    fb->printAllUsers();
+                break;
+                case '6':
+                    fb->showFriendFrieds();
+                break;
+                case '7':
+                    delete fb;
+                    return 0;
+                break;
+                default:
+                break;
+            }
         }
+    }
+    catch(const std::invalid_argument& e)
+    {
+        std::cerr << e.what() << '\n';
     }
     return 0;
 }

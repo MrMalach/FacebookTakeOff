@@ -4,11 +4,11 @@ FB::FB() : _usersCnt(0)
 {
     try
     {
-        Users = new UsersMapType;
+        Users = new(std::nothrow) UsersMapType;
         if(nullptr == Users)
             throw(std::invalid_argument("Allocation error"));
     }
-    catch(const std::exception& e)
+    catch(const std::invalid_argument& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -33,7 +33,7 @@ bool FB::addUser(User* user)
         UsersMapType::const_iterator it = Users->find(user->getName());
         if(it == Users->end())
         {
-            std::vector<User*>* v = new std::vector<User*>;
+            std::vector<User*>* v = new(std::nothrow) std::vector<User*>;
             if(nullptr == v)
                 throw(std::invalid_argument("Allocation error"));
             v->push_back(user);
@@ -45,9 +45,10 @@ bool FB::addUser(User* user)
         ++_usersCnt;
         return true;
     }
-    catch(const std::exception& e)
+    catch(const std::invalid_argument& e)
     {
         std::cerr << e.what() << '\n';
+        delete user;
         return false;
     }
 }
@@ -150,7 +151,7 @@ const bool FB::addNewUser()
         std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
         time_t tt = std::chrono::system_clock::to_time_t(now);
         tm local_tm = *localtime(&tt);
-        if(y < 1900 || y > local_tm.tm_year + 1900 - 18)
+        if(y < local_tm.tm_year + 1900 - 120 || y > local_tm.tm_year + 1900)
             throw(std::invalid_argument("Bad input"));
         db = std::to_string(d) + '/' + std::to_string(m) + '/' + std::to_string(y);
         char cws = '2';
@@ -221,7 +222,7 @@ void FB::showWall() const
             throw(std::invalid_argument("No such user"));
         user->printWall();
     }
-    catch(const std::exception& e)
+    catch(const std::invalid_argument& e)
     {
         std::cerr << e.what() << '\n';
     }
@@ -271,7 +272,7 @@ void FB::showFriendFrieds() const
             throw(std::invalid_argument("No such user"));
         user->printFrieds();
     }
-    catch(const std::exception& e)
+    catch(const std::invalid_argument& e)
     {
         std::cerr << e.what() << '\n';
     }
