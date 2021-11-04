@@ -38,7 +38,7 @@ bool FB::addUser(User* user)
     try
     {
         UsersMapType::const_iterator it = Users->find(user->getName());
-        /*  Its possible that Users will shre a name.
+        /*  Its possible that Users will share a name.
             A vector will be created for a new name  */
         if(it == Users->end())
         {
@@ -127,8 +127,8 @@ void FB::printAllUsers() const
 
 bool FB::newUser(std::string& name, std::string& bDay, bool& cws)
 {
-    
     User *user = nullptr;
+
     if(bDay == "")
     {
         user = new(std::nothrow) User(name);
@@ -137,8 +137,16 @@ bool FB::newUser(std::string& name, std::string& bDay, bool& cws)
     {
         user = new(std::nothrow) Person(name, bDay, cws);
     }
-    if(nullptr == user)
+    try
+    {
+        if(nullptr == user)
             throw(std::invalid_argument("Allocation error"));
+    }
+    catch(const std::invalid_argument& e)
+    {
+        std::cerr << e.what() << '\n';
+        return false;
+    }
 
     return addUser(user);
 }
