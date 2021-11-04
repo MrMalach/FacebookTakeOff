@@ -126,7 +126,7 @@ void FB::printAllUsers() const
 }
 
 bool FB::newUser(std::string& name, std::string& bDay, bool& cws)
-{
+{ 
     User *user = nullptr;
 
     if(bDay == "")
