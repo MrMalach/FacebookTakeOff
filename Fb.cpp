@@ -14,6 +14,15 @@ FB::FB() : _usersCnt(0)
     }
 }
 
+FB* FB::pFB{nullptr};
+
+FB* FB::getInstance()
+{
+    if(nullptr == pFB)
+        pFB = new (std::nothrow) FB();
+    return pFB;
+}
+
 FB::~FB()
 {
     for(auto& user : *Users)
@@ -116,119 +125,46 @@ void FB::printAllUsers() const
     std::cout << "*******************************" << std::endl;
 }
 
-const int to_int(std::string s)
+bool FB::newUser(std::string& name, std::string& bDay, bool& cws)
 {
-    int n = 0;
-    for(char c : s)
+    
+    User *user = nullptr;
+    if(bDay == "")
     {
-        if(c < '0' || c > '9')
-            throw(std::invalid_argument("Bad input"));
-        n = n * 10 + c - '0';
+        user = new(std::nothrow) User(name);
     }
-    return n;
-}
-
-const bool getBoolChoice(std::string msg)
-{
-    char b = '9';
-    while(b != '1' && b != '2' && b != 'y' && b != 'n')
+    else
     {
-        std::cout << msg << std::endl;
-        std::cin >> b;
+        user = new(std::nothrow) Person(name, bDay, cws);
     }
-    return (b == '1' || b == 'y') ? true : false;
-}
-
-const bool FB::addNewUser()
-{
-    /*  Get valid values for User type,
-        If for User (page) or for Person.
-        Construct one of the two and run 
-        FB::addUser(...)                */
-    try
-    {
-        User* user = nullptr;
-        const bool isPerson = getBoolChoice("1. Person\n2. Page\n");
-
-        std::cout << "Enter name: " << std::endl;
-        std::string name;
-        std::cin >> name;
-        
-        if(!isPerson)
-        {
-            user = new(std::nothrow) User(name);
-        }
-        else
-        {
-            std::cout << "Enter date of birth:" << std::endl;
-            std::string db;
-
-            std::cout << "Day:" << std::endl;
-            std::cin >> db;
-            int d = to_int(db);
-            if(d < 1 || d > 31)
-                throw(std::invalid_argument("Bad input"));
-            
-            std::cout << "Month:" << std::endl;
-            std::cin >> db;
-            int m = to_int(db);
-            if(m < 1 || m > 12)
-                throw(std::invalid_argument("Bad input"));
-            
-            std::cout << "Year:" << std::endl;
-            std::cin >> db;
-            int y = to_int(db);
-            std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
-            time_t tt = std::chrono::system_clock::to_time_t(now);
-            tm local_tm = *localtime(&tt);
-            if(y < local_tm.tm_year + 1900 - 120 || y > local_tm.tm_year + 1900)
-                throw(std::invalid_argument("Bad input"));
-            db = std::to_string(d) + '/' + std::to_string(m) + '/' + std::to_string(y);
-            const bool cws = getBoolChoice("Can frieds write status? (y, n)");
-
-            user = new(std::nothrow) Person(name, db, cws);
-        }
-        if(nullptr == user)
+    if(nullptr == user)
             throw(std::invalid_argument("Allocation error"));
 
-        addUser(user);
-        return true;
-    }
-    catch(std::invalid_argument& e)
-    {
-        std::cout << e.what() << std::endl;
-        return false;
-    }
+    return addUser(user);
 }
 
-const bool FB::addStatus()
+bool FB::addStatus(std::string& name1, std::string& name2)
 {
     /*  Get valid User names, get the status content
         Construct and run User::addStatus(...)    */
     try
     {    
-        std::cout << "To whom do you want to write status? " << std::endl;
-        std::string n;
-        std::cin >> n;
-        User* user2 = getUser(n);
+        
+        User* user2 = getUser(name2);
         if(nullptr == user2)
             throw(std::invalid_argument("No such user"));
         
-        std::cout << "What is your name ? " << std::endl;
-        std::cin >> n; 
-        User* user1 = getUser(n);
+        User* user1 = getUser(name1);
         if(nullptr == user1)
             throw(std::invalid_argument("No such user"));
-        if(user1 != user2 && !user2->getCanFriedsPost())
+
+        if(user1 != user2 && !user2->getCanFriendsPost())
             throw(std::invalid_argument("Cant write to that wall"));
-        std::cout << "Enter status: " << std::endl;
-        std::string _status;
-        std::cin.ignore(); 
-        std::getline(std::cin, _status);
-        
-        Status* status = new(std::nothrow) Status(_status);
+            
+        Status* status = new(std::nothrow) Status(readStatus());
         if(nullptr == status)
             throw(std::invalid_argument("Allocation error"));
+
         user2->addStatus(status);
         return true;
     }
@@ -239,14 +175,10 @@ const bool FB::addStatus()
     }   
 }
 
-void FB::showWall() const
+void FB::showWall(std::string& name) const
 {   try
     {
-        std::cout << "which user wall? " << std::endl;
-        std::string n;
-        std::cin >> n;
-        
-        User* user =  getUser(n);
+        User* user =  getUser(name);
         if(nullptr == user)
             throw(std::invalid_argument("No such user"));
         user->printWall();
@@ -257,24 +189,20 @@ void FB::showWall() const
     }
 }
 
-const bool FB::connectUsers()
+bool FB::connectUsers(std::string& name1, std::string& name2)
 {
     /*  Get names of User to connect, 
         Validate all constraints   */
     try
     {
-        std::cout << "Who would you want to connect to ? " << std::endl;
-        std::string n;
-        std::cin >> n;
-        User* user1 = getUser(n);
+        User* user1 = getUser(name1);
         if(nullptr == user1)
             throw(std::invalid_argument("No such user"));
         
-        std::cout << "What is your name? " << std::endl;
-        std::cin >> n;
-        User* user2 = getUser(n);
+        User* user2 = getUser(name2);
         if(nullptr == user2)
             throw(std::invalid_argument("No such user"));
+
         if(user1 == user2)
             throw(std::invalid_argument("Cant connect to yourself :)"));
 
@@ -285,8 +213,7 @@ const bool FB::connectUsers()
         {
             throw(std::invalid_argument("Already connected"));
         }
-        //user1->addFriend(user2);
-        //user2->addFriend(user1);
+
         *user1 += *user2;
         *user2 += *user1;
         return true;
@@ -298,25 +225,22 @@ const bool FB::connectUsers()
     }
 }
 
-const bool FB::removeFanFromPage()
+bool FB::removeFanFromPage(std::string& name1, std::string& name2)
 {
     try
     {
-        std::cout << "Who would you want to remove? " << std::endl;
-        std::string n;
-        std::cin >> n;
-        User* person = getUser(n);
-        std::cout << "which page? " << std::endl;
-        std::cin >> n;
-        User* page = getUser(n);
+        User* person = getUser(name2);
+        User* page = getUser(name1);
         if(nullptr == person || nullptr == page)
             throw(std::invalid_argument("No such user"));
+
         if(!person->isPerson() || page->isPerson())
             throw(std::invalid_argument("Choose a friend out of a page friend list"));
+
         if(!page->removeUserFromPageFriendsList(person))
             throw(std::invalid_argument("No such fan"));
-        person->removeUserFromPageFriendsList(page);
-        return true;
+
+        return person->removeUserFromPageFriendsList(page);
     }
     catch(const std::invalid_argument& e)
     {
@@ -326,14 +250,11 @@ const bool FB::removeFanFromPage()
     
 }
 
-void FB::showUsersFriendsList() const
+void FB::showUsersFriendsList(std::string& name) const
 {
     try
     {
-        std::cout << "which user friends list ? " << std::endl;
-        std::string n;
-        std::cin >> n;
-        User* user = getUser(n);
+        User* user = getUser(name);
         if(nullptr == user)
             throw(std::invalid_argument("No such user"));
         user->printFriends();
