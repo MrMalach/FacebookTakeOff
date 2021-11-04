@@ -1,43 +1,68 @@
 #include "FB.h"
 
-const char getChoice();
 
 int main()
 {
     try
     {
-        FB* fb = new(std::nothrow) FB;
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
+        FB* fb = FB::getInstance();
+    /*~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
         if(nullptr == fb)
             throw(std::invalid_argument("Allocation error"));
-    
+        
         while(true)
         {
             switch(getChoice())
             {
                 case '1':
-                    fb->addNewUser();
+                    {
+                        std::string name, bDay;
+                        bool cws;
+                        getUserDetails(name, bDay, cws);
+                        fb->newUser(name, bDay, cws);
+                    }
                 break;
                 case '2':
-                    fb->addStatus();
+                    {
+                        std::string user2 = readString("To whom do you want to write status? ");
+                        std::string user1 = readString("What is your name ? ");
+                        fb->addStatus(user1, user2);
+                    }
                 break;
                 case '3':
-                    fb->showWall();
+                    {
+                        std::string name = readString("which user wall? ");
+                        fb->showWall(name);
+                    }
                 break;
                 case '4':
-                    fb->connectUsers();
+                    {
+                        std::string user2 = readString("which user wall? ");
+                        std::string user1 = readString("which user wall? ");
+                        fb->connectUsers(user1, user2);
+                    }
+                    
                 break;
                 case '5':
-                    fb->printAllUsers();
+                        fb->printAllUsers();
                 break;
                 case '6':
-                    fb->showUsersFriendsList();
+                    {
+                        std::string name = readString("which user friends list ? ");
+                        fb->showUsersFriendsList(name);
+                    }
                 break;
                 case '7':
-                    fb->removeFanFromPage();
+                    {
+                        std::string name2 = readString("Who would you want to remove? ");
+                        std::string name1 = readString("which page? ");
+                        fb->removeFanFromPage(name1, name2);
+                    }
                 break;
                 case '8':
-                    delete fb;
-                    return 0;
+                        delete fb;
+                        return 0;
                 break;
                 default:
                 break;
@@ -48,24 +73,8 @@ int main()
     {
         std::cerr << e.what() << '\n';
     }
-    return 0;
+    return -1;
 }
 
-const char getChoice()
-{
-    std::cout << "***************** MENU ***********************" << std::endl;
-    std::cout << "1. Add friend                                *" << std::endl;
-    std::cout << "2. Add status                                *" << std::endl;
-    std::cout << "3. Show wall                                 *" << std::endl;
-    std::cout << "4. Connect frieds                            *" << std::endl;
-    std::cout << "5. Show all users                            *" << std::endl;
-    std::cout << "6. Show user's friends list                  *" << std::endl;
-    std::cout << "7. Remove friend from page's friends list    *" << std::endl;
-    std::cout << "8. Quit                                      *" << std::endl;
-    std::cout << "**********************************************" << std::endl;
 
-    char choice;
-    std::cin >> choice;
-    return choice;
-}
 

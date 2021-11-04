@@ -13,8 +13,8 @@ public:
     Person(const std::string&, const std::string&, const bool);
 
     void printWall() const;
-    const bool getCanFriedsPost() const;
-    const bool isPerson() const;
+    bool getCanFriendsPost() const;
+    bool isPerson() const;
     void print() const;
 };
 

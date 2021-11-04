@@ -69,7 +69,7 @@ const std::string& User::getName() const
     return _name;
 }
 
-const bool User::checkIfAlreadyConnected(User* otherUser) const
+bool User::checkIfAlreadyConnected(User* otherUser) const
 {
     for(User* user : *friends)
     {
@@ -79,17 +79,17 @@ const bool User::checkIfAlreadyConnected(User* otherUser) const
     return false;
 }
 
-const bool User::getCanFriedsPost() const
+bool User::getCanFriendsPost() const
 {
     return false;
 }
 
-const bool User::isPerson() const
+bool User::isPerson() const
 {
     return false;
 }
 
-const bool User::removeUserFromPageFriendsList(const User* other)
+bool User::removeUserFromPageFriendsList(const User* other)
 {
     for(int i = 0 ; i < friends->size() ; ++i)
     {
@@ -105,7 +105,7 @@ void User::print() const
     std::cout << _name << std::endl;
 }
 
-const bool operator>(const User& lhs, const User& rhs)
+bool operator>(const User& lhs, const User& rhs)
 {
     return lhs.friends->size() > rhs.friends->size();
 }

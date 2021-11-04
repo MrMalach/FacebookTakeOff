@@ -18,8 +18,8 @@ public:
     ~Status();
 
     friend std::ostream& operator<<(std::ostream&, const Status&);
-    friend const bool operator!=(const Status&, const Status&);
-    friend const bool operator==(const Status&, const Status&);
+    friend bool operator!=(const Status&, const Status&);
+    friend bool operator==(const Status&, const Status&);
 };
 
 #endif //STATUS_H

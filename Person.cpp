@@ -4,7 +4,7 @@
 Person::Person(const std::string& name, const std::string& bday, const bool cws)
     : User{name}, _bday(bday), _canFriedsPost(cws){};
 
-const bool Person::getCanFriedsPost() const
+bool Person::getCanFriendsPost() const
 {
     return _canFriedsPost;
 }
@@ -15,7 +15,7 @@ void Person::printWall() const
     User::printWall();
 }
 
-const bool Person::isPerson() const
+bool Person::isPerson() const
 {
     return true;
 }

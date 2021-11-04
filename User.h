@@ -23,13 +23,13 @@ public:
     void addFriend(User*);
 
     const std::string& getName() const;
-    const bool checkIfAlreadyConnected(User*) const;
-    virtual const bool getCanFriedsPost() const;
+    bool checkIfAlreadyConnected(User*) const;
+    virtual bool getCanFriendsPost() const;
     virtual void print() const;
-    virtual const bool isPerson() const;
-    const bool removeUserFromPageFriendsList(const User* fan);
+    virtual bool isPerson() const;
+    bool removeUserFromPageFriendsList(const User* fan);
     friend const User& operator+=(User&, User&);
-    friend const bool operator>(const User&, const User&);
+    friend bool operator>(const User&, const User&);
 };
 
 #endif //USER_H

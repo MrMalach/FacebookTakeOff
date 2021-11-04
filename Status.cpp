@@ -16,12 +16,12 @@ std::ostream& operator<<(std::ostream& o, const Status& status)
         return o;
 }
 
-const bool operator!=(const Status& lhs, const Status& rhs)
+bool operator!=(const Status& lhs, const Status& rhs)
 {
     return lhs._status != rhs._status;
 }
 
-const bool operator==(const Status& lhs, const Status& rhs)
+bool operator==(const Status& lhs, const Status& rhs)
 {
     return lhs._status == rhs._status;
 }
