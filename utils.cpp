@@ -58,6 +58,22 @@ std::string readStatus()
     return status;
 }
 
+bool isleapyear(unsigned short year){
+	return ( ! (year %4) && (year %100) || !(year %400));
+}
+
+//1 valid, 0 invalid
+bool valid_date(unsigned short year,unsigned short month,unsigned short day){
+	unsigned short monthlen[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+	if (!year || !month || !day || month >12)
+		return 0;
+	if ( isleapyear(year) && month==2)
+		monthlen[1]++;
+	if (day > monthlen[month-1])
+		return 0;
+	return 1;
+}
+
 bool getUserDetails(std::string& name, std::string& bDay, bool& cws)
 {
     /*  Get valid values for User type,
@@ -73,19 +89,20 @@ bool getUserDetails(std::string& name, std::string& bDay, bool& cws)
         if(isPerson)
         {
             std::cout << "Enter date of birth:" << std::endl;
-            std::string db = readString("Day:");
-
-            int d = to_int(db);
-            if(d < 1 || d > 31)
-                throw(std::invalid_argument("Bad input"));
+            std::string db;
             
+            db = readString("Day:");
+            int d = to_int(db);
             db = readString("Month:");
             int m = to_int(db);
-            if(m < 1 || m > 12)
-                throw(std::invalid_argument("Bad input"));
-            
             db = readString("Year:");
             int y = to_int(db);
+
+            if( ! valid_date(y, m, d) )
+                 throw(std::invalid_argument("Bad input"));
+            
+            /* Check that the age is not greather 
+                than 120 or not born yet.       */
             std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
             time_t tt = std::chrono::system_clock::to_time_t(now);
             tm local_tm = *localtime(&tt);
