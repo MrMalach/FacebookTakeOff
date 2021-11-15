@@ -90,7 +90,7 @@ bool getUserDetails(std::string& name, std::string& bDay, bool& cws)
         {
             std::cout << "Enter date of birth:" << std::endl;
             std::string db;
-            
+
             db = readString("Day:");
             int d = to_int(db);
             db = readString("Month:");
@@ -98,9 +98,10 @@ bool getUserDetails(std::string& name, std::string& bDay, bool& cws)
             db = readString("Year:");
             int y = to_int(db);
 
+
             if( ! valid_date(y, m, d) )
                  throw(std::invalid_argument("Bad input"));
-            
+             
             /* Check that the age is not greather 
                 than 120 or not born yet.       */
             std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
